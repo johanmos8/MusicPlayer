@@ -20,7 +20,7 @@ class SongRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getSongsByquery(query: String): List<Song> {
+    override suspend fun getSongsByQuery(query: String): List<Song> {
         return songListMapper(remoteDataSource.getSongsByQuery(query).data)
 
     }

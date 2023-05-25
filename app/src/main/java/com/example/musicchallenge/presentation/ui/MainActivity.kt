@@ -1,6 +1,7 @@
 package com.example.musicchallenge.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedViewModel.getSongsBySearch("shakira")
+        Log.d("MainActivity", "main activity launched")
         sharedViewModel.songs.observe(this, Observer { songs ->
             // Process the observed songs list
             // Print the list to the console
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
                 println(song.toString())
             }
         })
+        sharedViewModel.getSongsBySearch("shakira")
         setContent {
             MusicChallengeTheme {
                 // A surface container using the 'background' color from the theme

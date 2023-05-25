@@ -7,7 +7,6 @@ import com.example.musicchallenge.data.remotedatasource.models.SearchResponse
 
 class MusicRemoteDataSourceImpl(
     private val songApiService: SongApiService,
-    private val songResponseListToSongsMapper: SongResponseListToSongsMapper
 ) : MusicRemoteDataSource {
 
     override suspend fun getSongsByQuery(query: String): SearchResponse {

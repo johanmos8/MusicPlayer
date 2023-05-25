@@ -1,18 +1,18 @@
 package com.example.musicchallenge.data.di
 
 import com.example.movies.data.utils.StringUtils
-import com.example.musicchallenge.data.remotedatasource.api.SongApiService
 import com.example.musicchallenge.data.api.repositories.SongRepositoryImpl
-import com.example.musicchallenge.data.mappers.SongReponseToSongMapper
 import com.example.musicchallenge.data.mappers.SongResponseListToSongsMapper
+import com.example.musicchallenge.data.remotedatasource.MusicRemoteDataSource
+import com.example.musicchallenge.data.remotedatasource.api.SongApiService
+import com.example.musicchallenge.data.source.remote.MusicRemoteDataSourceImpl
 import com.example.musicchallenge.domain.repositories.ISongRepository
-import dagger.Binds
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -27,13 +27,17 @@ object DataModule {
     @Provides
     @Singleton
     fun provideMoshiConverterFactory(): MoshiConverterFactory {
-        return MoshiConverterFactory.create()
+        return MoshiConverterFactory.create(
+            Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+        )
     }
 
     @Provides
     @Singleton
-    fun provideRetrofit(
-        baseUrl: String,
+    fun provideRetrofitClient(
+        baseUrl:String,
         moshiConverterFactory: MoshiConverterFactory
     ): SongApiService = Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -47,6 +51,16 @@ object DataModule {
     fun provideSongResponseListToSongsMapper(): SongResponseListToSongsMapper {
         return SongResponseListToSongsMapper()
     }
+
+    @Singleton
+    @Provides
+    fun provideMusicRemoteDataSource(
+        songApiService: SongApiService,
+    ): MusicRemoteDataSource {
+        return MusicRemoteDataSourceImpl(
+            songApiService
+        )
+    }
 }
 
 
@@ -57,12 +71,14 @@ object ISongRepositoryModule {
     @Singleton
     @Provides
     fun provideISongRepository(
-        songApiService: SongApiService,
+        musicRemoteDataSource: MusicRemoteDataSource,
         songResponseListToSongMapper: SongResponseListToSongsMapper
 
     ): ISongRepository {
         return SongRepositoryImpl(
-            songApiService, songResponseListToSongMapper
+            musicRemoteDataSource,
+            songResponseListToSongMapper
+
         )
     }
 }

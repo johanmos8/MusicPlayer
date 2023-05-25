@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.musicchallenge.domain.models.Song
 import com.example.musicchallenge.domain.usesCases.SongUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,12 +24,12 @@ class SharedViewModel @Inject constructor(
 
     fun getSongsBySearch(query: String) {
         viewModelScope.launch {
-
-            if (!query.isNullOrEmpty()) {
-                _songs.value = songUseCase.getSongsBySearch(query)
+            withContext(Dispatchers.IO) {
+                if (!query.isNullOrEmpty()) {
+                    _songs.postValue(songUseCase.getSongsBySearch(query))
+                }
             }
-
-
         }
     }
+
 }

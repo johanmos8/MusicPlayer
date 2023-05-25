@@ -9,6 +9,6 @@ class SongUseCase @Inject constructor(
 ) {
 
     suspend fun getSongsBySearch(query: String): List<Song> {
-        return iSongRepository.getSongsByquery(query)
+        return iSongRepository.getSongsByQuery(query)
     }
 }
