@@ -1,7 +1,6 @@
 package com.example.musicchallenge.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicchallenge.domain.models.Song
@@ -18,75 +17,56 @@ class SharedViewModel @Inject constructor(
 ) : ViewModel() {
 
 
+    init {
+        getSongsBySearch("shakira")
+
+    }
     private val _searchText = MutableStateFlow("")
     var searchText = _searchText.asStateFlow()
 
     private val _isSearching = MutableStateFlow(false)
     val isSearching = _isSearching.asStateFlow()
 
-    private val _songs = MutableStateFlow(allSongs)//listOf<Song>())
-    val songs = searchText.combine(_songs) { text, songs ->
-        if (text.isBlank()) {
-            songs
-        } else {
-            delay(2000L)
-            songs.filter{
-                it.doesMatchSearchQuery(text)
-            }
-        }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        _songs.value
-    )
+    private val _songs = MutableStateFlow<List<Song>>(emptyList())//listOf<Song>())
+    val songs: StateFlow<List<Song>> = _songs
+
+    private val _state = MutableStateFlow<MusicPlayerViewState>(MusicPlayerViewState())
+    val state: StateFlow<MusicPlayerViewState>
+        get() = _state
 
     fun onSearchTextChange(text: String) {
         _searchText.value = text
     }
-/*
+
     fun getSongsBySearch(query: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                if (!query.isNullOrEmpty()) {
-                    //_songs.postValue(songUseCase.getSongsBySearch(query))
+            try {
+                withContext(Dispatchers.IO) {
+                    songUseCase.getSongsBySearch(query).collect { songs ->
+                        _songs.value=songs
+                    }
                 }
+
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(
+                    progressBarVisible = false,
+                    errorMessage = "The request failed. Please try again."
+                )
+                Log.d("ErrorFlow", "Error$e")
             }
         }
-    }*/
-
-}
-data class Song(
-    val firstName: String,
-    val lastName: String
-) {
-    fun doesMatchSearchQuery(query: String): Boolean {
-        val matchingCombinations = listOf(
-            "$firstName$lastName",
-            "$firstName $lastName",
-            "${firstName.first()} ${lastName.first()}",
-        )
-
-        return matchingCombinations.any {
-            it.contains(query, ignoreCase = true)
-        }
     }
+
 }
 
-private val allSongs = listOf(
-    Song(
-        firstName = "Philipp",
-        lastName = "Lackner"
-    ),
-    Song(
-        firstName = "Beff",
-        lastName = "Jezos"
-    ),
-    Song(
-        firstName = "Chris P.",
-        lastName = "Bacon"
-    ),
-    Song(
-        firstName = "Jeve",
-        lastName = "Stops"
-    ),
+data class MusicPlayerViewState(
+    val progressBarVisible: Boolean = false,
+    val errorMessage: String? = null,
+    val songsList: List<Song> = emptyList()
 )
+/*
+sealed class PageSequenceIntent {
+    object FetchMostPopularPathSequences : PageSequenceIntent()
+    // Add more user intents here, such as user actions in the UI
+}
+*/

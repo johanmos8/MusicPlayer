@@ -1,6 +1,7 @@
 package com.example.musicchallenge.data.mappers
 
 import com.example.musicchallenge.data.remotedatasource.models.SearchResponse
+import com.example.musicchallenge.domain.models.Artist
 import com.example.musicchallenge.domain.models.Song
 
 class SongResponseListToSongsMapper {
@@ -21,10 +22,25 @@ class SongResponseListToSongsMapper {
                     explicit_content_cover = songResponse.explicitContentLyrics,
                     preview = songResponse.preview,
                     md5_image = songResponse.md5_image,
-                    artist = songResponse.artist,
-                    album = songResponse.album,
-                    type = songResponse.type
+                    songResponse.artist?.let {
+                        Artist(
+                            id = it.id,
+                            name = it.name,
+                            link = it.link,
+                            picture = it.picture,
+                            picture_small = it.pictureSmall,
+                            picture_medium = it.pictureMedium,
+                            picture_big = it.pictureBig,
+                            picture_xl = it.pictureXl,
+                            tracklist = it.tracklist,
+                            type = it.type
+                        )
+                    },
+
+                    type = songResponse.type,
+                    album = null
                 )
+
             }
         }
 

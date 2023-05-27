@@ -22,8 +22,8 @@ class SongReponseToSongMapper @Inject constructor(){
                 explicit_content_cover = song.explicitContentCover,
                 preview = song.preview,
                 md5_image = song.md5_image,
-                artist = song.artist,
-                album = song.album,
+                artist = null,
+                album = null,
                 type = song.type
             )
         }

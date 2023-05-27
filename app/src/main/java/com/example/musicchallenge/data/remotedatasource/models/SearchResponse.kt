@@ -11,7 +11,7 @@ data class SearchResponse(
 
     ) {
     data class Song(
-        val id: Int,
+        val id: Long,
         val readable: Boolean,
         val title: String,
         @Json(name = "title_short") val titleShort: String,
@@ -23,25 +23,35 @@ data class SearchResponse(
         @Json(name = "explicit_content_lyrics") val explicitContentLyrics: Int,
         @Json(name = "explicit_content_cover") val explicitContentCover: Int,
         val preview: String?,
-        val md5_image: Int,
-        val artist: String?,
-        val album: String?,
+        val md5_image: String,
+        val artist: Artist?,
+        val album: Album?,
         val type: String
     )
 }
-/*
-*     data class Song(
-        val id: Int,
-        val name: String?,
-        val link: String?,
-        val picture: String?,
-        val picture_small: String?,
-        val picture_medium: String?,
-        val picture_big: String?,
-        val picture_xl: String?,
-        val nb_album: Int,
-        val nb_fan: Int,
-        val radio: Boolean,
-        val trackList: String,
-        val type: String
-    )*/
+
+data class Artist(
+    val id: Long,
+    val name: String,
+    val link: String,
+    val picture: String,
+    @Json(name = "picture_small") val pictureSmall: String,
+    @Json(name = "picture_medium") val pictureMedium: String,
+    @Json(name = "picture_big") val pictureBig: String,
+    @Json(name = "picture_xl") val pictureXl: String,
+    val tracklist: String,
+    val type: String
+)
+
+data class Album(
+    val id: Long,
+    val title: String,
+    val cover: String,
+    @Json(name = "cover_small") val coverSsmall: String,
+    @Json(name = "cover_medium") val coverMedium: String,
+    @Json(name = "cover_big") val coverBig: String,
+    @Json(name = "cover_xl") val coverXl: String,
+    @Json(name = "md5_image") val md5Image: String,
+    val tracklist: String,
+    val type: String
+)

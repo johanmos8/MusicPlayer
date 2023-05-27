@@ -15,11 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicChallenge"
         tools:targetApi="31">
-        <activity
-            android:name=".MainActivity2"
-            android:exported="false"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.MusicChallenge" />
 
         <service
             android:name=".presentation.MusicPlayerService"

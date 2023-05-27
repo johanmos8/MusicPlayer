@@ -6,6 +6,11 @@ import com.example.musicchallenge.data.mappers.SongResponseListToSongsMapper
 import com.example.musicchallenge.data.remotedatasource.MusicRemoteDataSource
 import com.example.musicchallenge.domain.models.Song
 import com.example.musicchallenge.domain.repositories.ISongRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SongRepositoryImpl @Inject constructor(
@@ -20,8 +25,10 @@ class SongRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getSongsByQuery(query: String): List<Song> {
-        return songListMapper(remoteDataSource.getSongsByQuery(query).data)
+    override suspend fun getSongsByQuery(query: String): Flow<List<Song>> {
+        return flow<List<Song>> {
+            emit(songListMapper(remoteDataSource.getSongsByQuery(query).data))
+        }.flowOn(Dispatchers.IO)
 
     }
 
