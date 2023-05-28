@@ -1,21 +1,23 @@
-package com.example.musicchallenge.data.api.repositories
+package com.example.musicchallenge.data.repositories
 
 import android.util.Log
-import com.example.musicchallenge.data.remotedatasource.api.SongApiService
 import com.example.musicchallenge.data.mappers.SongResponseListToSongsMapper
+import com.example.musicchallenge.data.mappers.GenreDTOListToGenreMapper
 import com.example.musicchallenge.data.remotedatasource.MusicRemoteDataSource
+import com.example.musicchallenge.domain.models.Genre
 import com.example.musicchallenge.domain.models.Song
 import com.example.musicchallenge.domain.repositories.ISongRepository
+import com.example.musicchallenge.domain.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SongRepositoryImpl @Inject constructor(
     private val remoteDataSource: MusicRemoteDataSource,
-    private val songListMapper: SongResponseListToSongsMapper
+    private val songListMapper: SongResponseListToSongsMapper,
+    private val genreDTOToGenreMapper: GenreDTOListToGenreMapper
 ) : ISongRepository {
     override suspend fun getSongById(): Song {
         TODO("Not yet implemented")
@@ -32,4 +34,18 @@ class SongRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun getGenres(): Resource<List<Genre>> {
+        return try {
+            val response = remoteDataSource.getGenres()
+            val body = response.body()
+            if (body != null && response.isSuccessful) {
+                Resource.Success(genreDTOToGenreMapper(body.genres))
+            } else {
+                Resource.Error("something went wrong")
+            }
+        } catch (error: Exception) {
+            Resource.Error(error.message.toString())
+        }
+
+    }
 }

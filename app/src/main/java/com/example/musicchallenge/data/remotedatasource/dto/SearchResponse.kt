@@ -1,4 +1,4 @@
-package com.example.musicchallenge.data.remotedatasource.models
+package com.example.musicchallenge.data.remotedatasource.dto
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

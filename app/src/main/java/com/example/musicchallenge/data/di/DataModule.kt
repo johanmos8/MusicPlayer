@@ -2,8 +2,9 @@ package com.example.musicchallenge.data.di
 
 import com.example.movies.data.utils.StringUtils
 import com.example.musicchallenge.BuildConfig
-import com.example.musicchallenge.data.api.repositories.SongRepositoryImpl
+import com.example.musicchallenge.data.repositories.SongRepositoryImpl
 import com.example.musicchallenge.data.mappers.SongResponseListToSongsMapper
+import com.example.musicchallenge.data.mappers.GenreDTOListToGenreMapper
 import com.example.musicchallenge.data.remotedatasource.MusicRemoteDataSource
 import com.example.musicchallenge.data.remotedatasource.api.SongApiService
 import com.example.musicchallenge.data.remotedatasource.MusicRemoteDataSourceImpl
@@ -89,7 +90,11 @@ object DataModule {
     fun provideSongResponseListToSongsMapper(): SongResponseListToSongsMapper {
         return SongResponseListToSongsMapper()
     }
-
+    @Provides
+    @Singleton
+    fun providegenreDTOListToGenreMapper(): GenreDTOListToGenreMapper {
+        return GenreDTOListToGenreMapper()
+    }
     @Singleton
     @Provides
     fun provideMusicRemoteDataSource(
@@ -110,12 +115,13 @@ object ISongRepositoryModule {
     @Provides
     fun provideISongRepository(
         musicRemoteDataSource: MusicRemoteDataSource,
-        songResponseListToSongMapper: SongResponseListToSongsMapper
-
+        songResponseListToSongMapper: SongResponseListToSongsMapper,
+        genreDTOListToGenreMapper: GenreDTOListToGenreMapper
     ): ISongRepository {
         return SongRepositoryImpl(
             musicRemoteDataSource,
-            songResponseListToSongMapper
+            songResponseListToSongMapper,
+            genreDTOListToGenreMapper
 
         )
     }

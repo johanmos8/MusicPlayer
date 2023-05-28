@@ -1,7 +1,7 @@
 package com.example.musicchallenge.domain.di
 
 import com.example.musicchallenge.domain.repositories.ISongRepository
-import com.example.musicchallenge.domain.usesCases.SongUseCase
+import com.example.musicchallenge.domain.usesCases.MusicUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ object DomainModule {
 
     @Provides
     @Singleton
-    fun provideSongUseCase(songRepository: ISongRepository): SongUseCase {
-        return SongUseCase(songRepository)
+    fun provideSongUseCase(songRepository: ISongRepository): MusicUseCase {
+        return MusicUseCase(songRepository)
     }
 }

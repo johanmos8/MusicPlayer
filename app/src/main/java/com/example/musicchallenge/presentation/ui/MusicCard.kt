@@ -1,6 +1,7 @@
 package com.example.musicchallenge.presentation.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,9 +22,18 @@ import com.example.musicchallenge.domain.models.Song
 import com.example.musicchallenge.presentation.ui.theme.typography
 
 @Composable
-fun MusicCard(song: Song) {
+fun MusicCard(
+    song: Song,
+
+    onClick: (Boolean) -> Unit
+) {
+
     //Add padding around our message.
-    Box(modifier = Modifier.padding(8.dp)) {
+    Box(
+        modifier = Modifier.padding(8.dp)
+            .clickable { onClick(true) }
+
+    ) {
         AsyncImage(
             model = song.artist?.picture,
             contentDescription = null,
@@ -73,7 +83,7 @@ fun CardWithShape(
                     style = typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    color= Color(0xFFFFFFFF), //TODO
+                    color = Color(0xFFFFFFFF), //TODO
 
                 )
                 Text(
@@ -82,7 +92,7 @@ fun CardWithShape(
                     style = typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    color= Color(0xFFFFFFFF), //TODO
+                    color = Color(0xFFFFFFFF), //TODO
 
                 )
             }
