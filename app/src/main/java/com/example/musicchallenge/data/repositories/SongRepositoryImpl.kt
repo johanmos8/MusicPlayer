@@ -39,7 +39,7 @@ class SongRepositoryImpl @Inject constructor(
             val response = remoteDataSource.getGenres()
             val body = response.body()
             if (body != null && response.isSuccessful) {
-                Resource.Success(genreDTOToGenreMapper(body.genres))
+                Resource.Success(genreDTOToGenreMapper(body.data))
             } else {
                 Resource.Error("something went wrong")
             }

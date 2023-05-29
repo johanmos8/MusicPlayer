@@ -31,7 +31,7 @@ fun GenresTabs(
         genres.forEachIndexed { index, genre ->
             Tab(
                 selected = index == selectedIndex,
-                onClick = { }){//onGenreSelected(genre) }) {
+                onClick = {onGenreSelected(genre) }) {
                 ChoiceChipContent(
                     text = genre.name ?: "Unknown",
                     selected = index == selectedIndex,

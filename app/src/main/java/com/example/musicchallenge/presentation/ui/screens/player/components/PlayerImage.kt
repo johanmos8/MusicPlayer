@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.musicchallenge.presentation.ui.theme.LocalSpacing
@@ -20,7 +21,7 @@ import com.example.musicchallenge.presentation.ui.theme.LocalSpacing
 @ExperimentalMaterial3Api
 @Composable
 fun PlayerImage(
-    trackImageUrl: Uri,
+    trackImageUrl: String?,
     modifier: Modifier = Modifier,
 ) {
     val spacing = LocalSpacing.current
@@ -29,7 +30,7 @@ fun PlayerImage(
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(trackImageUrl)
+                .data(trackImageUrl?.toUri())
                 .crossfade(true)
                 .build(),
             contentDescription = null,

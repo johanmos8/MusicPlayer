@@ -8,12 +8,12 @@ import androidx.media3.common.MediaMetadata
 
 internal fun buildPlayableMediaItem(
     mediaId: String,
-    artistId: Long,
-    albumId: Long,
+    artistId: Long?,
+    albumId: Long?,
     mediaUri: Uri,
     artworkUri: Uri,
     title: String,
-    artist: String
+    artist: String?
 ) = MediaItem.Builder()
     .setMediaId(mediaId)
     .setRequestMetadata(

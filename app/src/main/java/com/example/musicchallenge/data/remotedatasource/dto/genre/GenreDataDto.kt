@@ -4,5 +4,5 @@ import com.squareup.moshi.Json
 
 data class GenreDataDto(
 
-    val genres: List<GenreDto> = emptyList()
+    val data: List<GenreDto> = emptyList()
 )

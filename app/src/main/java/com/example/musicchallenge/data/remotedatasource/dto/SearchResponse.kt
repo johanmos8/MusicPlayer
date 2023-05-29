@@ -22,7 +22,7 @@ data class SearchResponse(
         @Json(name = "explicit_lyrics") val explicitLyrics: Boolean,
         @Json(name = "explicit_content_lyrics") val explicitContentLyrics: Int,
         @Json(name = "explicit_content_cover") val explicitContentCover: Int,
-        val preview: String?,
+        val preview: String,
         val md5_image: String,
         val artist: Artist?,
         val album: Album?,

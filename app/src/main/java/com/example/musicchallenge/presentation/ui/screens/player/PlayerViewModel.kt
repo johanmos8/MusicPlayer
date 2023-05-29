@@ -1,39 +1,48 @@
 package com.example.musicchallenge.presentation.ui.screens.player
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
-import androidx.media3.common.MediaItem
+import androidx.lifecycle.viewModelScope
 import androidx.media3.exoplayer.ExoPlayer
-import com.example.musicchallenge.exoplayer.MusicPlayerService
+import com.example.musicchallenge.domain.utils.Constants.DEFAULT_POSITION_MS
+import com.example.musicchallenge.exoplayer.MusicServiceConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
-) : ViewModel(){
-    private lateinit var context: Context
+    private val musicServiceConnection: MusicServiceConnection,
 
-    fun initialize(context: Context) {
-        this.context = context
-    }
+) : ViewModel() {
+
+    private lateinit var context: Context
+    val currentPosition = musicServiceConnection.currentPosition.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = DEFAULT_POSITION_MS,
+    )
     private val player: ExoPlayer by lazy {
         ExoPlayer.Builder(context)
             .setHandleAudioBecomingNoisy(true)
             .build()
     }
 
-    fun startPlayback(trackUrl: String) {
-        // Configurar el reproductor con la URL del track
-        val mediaItem = MediaItem.fromUri(trackUrl)
-        player.setMediaItem(mediaItem)
-        player.prepare()
-        player.playWhenReady = true
+    fun initialize(context: Context) {
+        this.context = context
     }
+
+
 
 
     fun stopPlayback() {
         // Lógica para detener la reproducción
         player.playWhenReady = false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        player.release()
     }
 }

@@ -92,7 +92,7 @@ object DataModule {
     }
     @Provides
     @Singleton
-    fun providegenreDTOListToGenreMapper(): GenreDTOListToGenreMapper {
+    fun provideGenreDTOListToGenreMapper(): GenreDTOListToGenreMapper {
         return GenreDTOListToGenreMapper()
     }
     @Singleton

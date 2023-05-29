@@ -6,4 +6,5 @@ sealed class HomeEvents {
     //data class OnSelectArtist(val artist: Artist) : HomeEvents()
     data class PlaySound(val isRunning: Boolean, val playWhenReady: Boolean, val idx: Int) :
         HomeEvents()
+
 }

@@ -1,24 +1,25 @@
 package com.example.musicchallenge.exoplayer.mapper
 
 import android.net.Uri
+import android.provider.MediaStore.Audio.Media
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import com.example.musicchallenge.domain.models.Song
 import com.example.musicchallenge.exoplayer.buildPlayableMediaItem
 
-/*
-internal fun Song.asMediaItem() = artist?.let {
-    buildPlayableMediaItem(
-        mediaId = id.toString(),
-        artistId = it.id,
-        albumId = null,
-        mediaUri = mediaUri,
-        artworkUri = artworkUri,
-        title = title,
-        artist = artist
-    )
-}
 
+internal fun Song.asMediaItem()=
+    buildPlayableMediaItem(
+        mediaId = this.id.toString(),
+        artistId = this.artist?.id,
+        albumId = this.album?.id,
+        mediaUri = Uri.parse(this.preview),
+        artworkUri = Uri.parse(this.album?.cover),
+        title = this.title,
+        artist = artist?.name
+    )
+
+/*
 internal fun Song.asSongModel() = SongModel(
     id = id,
     artistId = artistId,
