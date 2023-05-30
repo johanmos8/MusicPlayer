@@ -1,22 +1,25 @@
 package com.example.musicchallenge.presentation.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
@@ -39,29 +42,44 @@ fun PlayerButtons(
             .size(sideButtonSize)
             .semantics { role = Role.Button }
 
+
         Image(
-            painter = painterResource(id = R.drawable.ic_skip_previous),
-            contentDescription = "Skip previous",
+            painter = painterResource(id = R.drawable.ic_autorenew_24),
+            contentDescription = stringResource(R.string.shuffle),
             contentScale = ContentScale.Fit,
-            colorFilter = ColorFilter.tint(LocalContentColor.current),
+            colorFilter = ColorFilter.tint(Color.White),
             modifier = buttonsModifier
         )
         Image(
-            painter = painterResource(id = R.drawable.ic_play),
-            contentDescription = "Play",
+            painter = painterResource(id = R.drawable.ic_skip_previous_24),
+            contentDescription = stringResource(R.string.skip_previous),
             contentScale = ContentScale.Fit,
-            colorFilter = ColorFilter.tint(LocalContentColor.current),
+            colorFilter = ColorFilter.tint(Color.White),
+            modifier = buttonsModifier
+        )
+        Image(
+            painter = painterResource(id = R.drawable.play_circle_filled_24),
+            contentDescription = stringResource(R.string.play),
+            contentScale = ContentScale.Fit,
+            colorFilter = ColorFilter.tint(Color.White),
             modifier = Modifier
                 .size(playerButtonSize)
                 .semantics { role = Role.Button }
         )
-
         Image(
-            painter = painterResource(id = R.drawable.ic_skip_next),
-            contentDescription = "Skip next",
+            painter = painterResource(id = R.drawable.ic_skip_next_24),
+            contentDescription = stringResource(R.string.skip_next),
             contentScale = ContentScale.Fit,
-            colorFilter = ColorFilter.tint(LocalContentColor.current),
+            colorFilter = ColorFilter.tint(Color.White),
             modifier = buttonsModifier
         )
+        Image(
+            painter = painterResource(id = R.drawable.ic_shuffle_24),
+            contentDescription = stringResource(R.string.shuffle),
+            contentScale = ContentScale.Fit,
+            colorFilter = ColorFilter.tint(Color.White),
+            modifier = buttonsModifier
+        )
+
     }
 }

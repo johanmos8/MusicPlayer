@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
+import com.example.musicchallenge.domain.models.Chart
 import com.example.musicchallenge.domain.models.Genre
 import com.example.musicchallenge.domain.models.Song
+import com.example.musicchallenge.domain.models.Track
 import com.example.musicchallenge.domain.usesCases.MusicUseCase
 import com.example.musicchallenge.domain.usesCases.PlayListUseCase
 import com.example.musicchallenge.domain.usesCases.PlayPauseListUseCase
+import com.example.musicchallenge.domain.utils.Constants
 import com.example.musicchallenge.domain.utils.Resource
 import com.example.musicchallenge.presentation.ui.screens.player.PlayerEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,6 +46,10 @@ class HomeViewModel @Inject constructor(
     private val _genres = MutableStateFlow<List<Genre>>(emptyList())
     val genres: StateFlow<List<Genre>> = _genres
 
+    private val _chart = MutableStateFlow<Chart?>(null)
+    val chart: MutableStateFlow<Chart?> = _chart
+
+
     private val _selectedGenre = MutableStateFlow<Genre?>(null)
 
     private val _state = MutableStateFlow<HomeViewState>(HomeViewState())
@@ -50,6 +57,11 @@ class HomeViewModel @Inject constructor(
         get() = _state
     private lateinit var context: Context
 
+    val currentPosition: Long = 20 /*currentPosition.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = Constants.DEFAULT_POSITION_MS,
+    )*/
     private val player: ExoPlayer by lazy {
         ExoPlayer.Builder(context)
             .setHandleAudioBecomingNoisy(true)
@@ -57,8 +69,9 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
-        getSongsBySearch("mana")
+        getSongsBySearch("Muse")
         getGenres()
+        getChart()
         viewModelScope.launch {
             // Combines the latest value from each of the flows, allowing us to generate a
             // view state instance which only contains the latest values.
@@ -75,9 +88,27 @@ class HomeViewModel @Inject constructor(
             }.collect { _state.value = it }
         }
     }
+
+    private fun getChart() {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            when (val response = musicUseCase.getChart()) {
+                is Resource.Success -> {
+                    _chart.value = response.data
+
+                }
+                is Resource.Error -> _state.value = _state.value.copy(
+                    progressBarVisible = false,
+                    errorMessage = "The request failed. Please try again."
+                )
+            }
+        }
+    }
+
     fun initialize(context: Context) {
         this.context = context
     }
+
     fun onSearchTextChange(text: String) {
         _searchText.value = text
     }
@@ -156,7 +187,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onSongSelected(song: Song) {
+    fun onSongSelected(song: Track) {
         Log.d("OnSelected", "${_state.value.currentSong}")
 
         _state.update { currentState ->
@@ -165,8 +196,6 @@ class HomeViewModel @Inject constructor(
             )
 
         }
-        Log.d("OnSelected", "${_state.value.currentSong}")
-
     }
 
     fun onGenreSelected(genre: Genre) {
@@ -175,7 +204,7 @@ class HomeViewModel @Inject constructor(
 
     fun startPlayback() {
         // Configurar el reproductor con la URL del track
-        _state.value.currentSong.let {song->
+        _state.value.currentSong.let { song ->
             val mediaItem = MediaItem.fromUri(song?.preview!!)
             player.setMediaItem(mediaItem)
             player.prepare()
@@ -192,12 +221,6 @@ data class HomeViewState(
     val songsList: List<Song> = emptyList(),
     val genres: List<Genre> = emptyList(),
     val selectedGenre: Genre? = null,
-    val currentSong: Song? = null
+    val currentSong: Track? = null,
 
 )
-/*
-sealed class PageSequenceIntent {
-    object FetchMostPopularPathSequences : PageSequenceIntent()
-    // Add more user intents here, such as user actions in the UI
-}
-*/

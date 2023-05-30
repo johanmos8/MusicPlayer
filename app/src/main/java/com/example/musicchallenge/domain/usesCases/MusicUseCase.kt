@@ -1,5 +1,6 @@
 package com.example.musicchallenge.domain.usesCases
 
+import com.example.musicchallenge.domain.models.Chart
 import com.example.musicchallenge.domain.models.Genre
 import com.example.musicchallenge.domain.models.Song
 import com.example.musicchallenge.domain.repositories.ISongRepository
@@ -17,4 +18,6 @@ class MusicUseCase @Inject constructor(
     suspend fun getGenre(): Resource<List<Genre>> =
         iSongRepository.getGenres()
 
+    suspend fun getChart(): Resource<Chart> =
+        iSongRepository.getChart()
 }

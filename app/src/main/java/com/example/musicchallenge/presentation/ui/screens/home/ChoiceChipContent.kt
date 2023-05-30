@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.musicchallenge.presentation.ui.theme.LocalSpacing
 
 
@@ -19,7 +20,7 @@ fun ChoiceChipContent(
     Surface(
         color = when {
             selected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
-            else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+            else ->Color(0xFF352547)
         },
         contentColor = when {
             selected -> MaterialTheme.colorScheme.primary
@@ -30,6 +31,7 @@ fun ChoiceChipContent(
     ) {
         Text(
             text = text,
+            color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(
                 horizontal = spacing.spaceMedium,

@@ -6,7 +6,7 @@ import com.example.musicchallenge.data.remotedatasource.dto.artist.ArtistDto
 import com.squareup.moshi.Json
 
 data class TrackDto(
-    @field:Json(name = "id") var id: Int? = null,
+    @field:Json(name = "id") var id: Long,
     @field:Json(name = "readable") var readable: Boolean? = null,
     @field:Json(name = "title") var title: String? = null,
     @field:Json(name = "title_short") var titleShort: String? = null,
@@ -17,7 +17,7 @@ data class TrackDto(
     @field:Json(name = "duration") var duration: Int? = null,
     @field:Json(name = "track_position") var trackPosition: Int? = null,
     @field:Json(name = "disk_number") var diskNumber: Int? = null,
-    @field:Json(name = "rank") var rank: String? = null,
+    @field:Json(name = "rank") var rank: Int? = null,
     @field:Json(name = "release_date") var releaseDate: String? = null,
     @field:Json(name = "explicit_lyrics") var explicitLyrics: Boolean? = null,
     @field:Json(name = "explicit_content_lyrics") var explicitContentLyrics: Int? = null,

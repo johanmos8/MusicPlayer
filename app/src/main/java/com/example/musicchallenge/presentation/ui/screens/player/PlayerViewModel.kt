@@ -18,11 +18,7 @@ class PlayerViewModel @Inject constructor(
 ) : ViewModel() {
 
     private lateinit var context: Context
-    val currentPosition = musicServiceConnection.currentPosition.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Lazily,
-        initialValue = DEFAULT_POSITION_MS,
-    )
+
     private val player: ExoPlayer by lazy {
         ExoPlayer.Builder(context)
             .setHandleAudioBecomingNoisy(true)

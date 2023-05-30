@@ -14,6 +14,8 @@ import retrofit2.Response
 interface MusicRemoteDataSource {
     suspend fun getSongsByQuery(query: String): SearchResponse
     suspend fun getGenres(): Response<GenreDataDto>
+
+    suspend fun getChart(): Response<ChartDto>
 /*
     suspend fun getAlbum(id: Int): Resource<AlbumDto>
 
@@ -29,7 +31,7 @@ interface MusicRemoteDataSource {
         query: String
     ): Resource<TrackDataDto>
 
-    suspend fun getChart(id: Int): Resource<ChartDto>
+
 
     suspend fun getRadios(): Resource<RadiosDataDto>*/
 }

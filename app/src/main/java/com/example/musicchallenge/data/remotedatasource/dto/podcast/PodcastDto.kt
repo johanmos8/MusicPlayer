@@ -3,7 +3,7 @@ package com.example.musicchallenge.data.remotedatasource.dto.podcast
 import com.squareup.moshi.Json
 
 data class PodcastDto(
-    @field:Json(name = "id") var id: Int? = null,
+    @field:Json(name = "id") var id: Long? = null,
     @field:Json(name = "title") var title: String? = null,
     @field:Json(name = "description") var description: String? = null,
     @field:Json(name = "available") var available: Boolean? = null,

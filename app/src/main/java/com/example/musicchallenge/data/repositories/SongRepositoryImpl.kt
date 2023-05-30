@@ -1,11 +1,11 @@
 package com.example.musicchallenge.data.repositories
 
-import android.util.Log
+
+import com.example.musicchallenge.data.mappers.ChartResponseToChartMapper
 import com.example.musicchallenge.data.mappers.SongResponseListToSongsMapper
 import com.example.musicchallenge.data.mappers.GenreDTOListToGenreMapper
 import com.example.musicchallenge.data.remotedatasource.MusicRemoteDataSource
-import com.example.musicchallenge.domain.models.Genre
-import com.example.musicchallenge.domain.models.Song
+import com.example.musicchallenge.domain.models.*
 import com.example.musicchallenge.domain.repositories.ISongRepository
 import com.example.musicchallenge.domain.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,8 @@ import javax.inject.Inject
 class SongRepositoryImpl @Inject constructor(
     private val remoteDataSource: MusicRemoteDataSource,
     private val songListMapper: SongResponseListToSongsMapper,
-    private val genreDTOToGenreMapper: GenreDTOListToGenreMapper
+    private val genreDTOToGenreMapper: GenreDTOListToGenreMapper,
+    private val chartResponseToChartMapper: ChartResponseToChartMapper
 ) : ISongRepository {
     override suspend fun getSongById(): Song {
         TODO("Not yet implemented")
@@ -40,6 +41,23 @@ class SongRepositoryImpl @Inject constructor(
             val body = response.body()
             if (body != null && response.isSuccessful) {
                 Resource.Success(genreDTOToGenreMapper(body.data))
+            } else {
+                Resource.Error("something went wrong")
+            }
+        } catch (error: Exception) {
+            Resource.Error(error.message.toString())
+        }
+
+    }
+
+    override suspend fun getChart(): Resource<Chart> {
+
+        return try {
+            val response = remoteDataSource.getChart()
+            val body = response.body()
+            if (body != null && response.isSuccessful) {
+                // Mapeo de la respuesta a los modelos de datos de la capa de dominio
+                Resource.Success(chartResponseToChartMapper(body))
             } else {
                 Resource.Error("something went wrong")
             }

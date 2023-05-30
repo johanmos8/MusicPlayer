@@ -6,6 +6,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabPosition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.musicchallenge.domain.models.Genre
 import com.example.musicchallenge.domain.models.Song
 import com.example.musicchallenge.presentation.ui.theme.LocalSpacing
@@ -22,8 +23,8 @@ fun GenresTabs(
     val spacing = LocalSpacing.current
     val emptyTabIndicator: @Composable (List<TabPosition>) -> Unit = {}
     ScrollableTabRow(
+        containerColor= Color.Transparent,
         selectedTabIndex = selectedIndex,
-        divider = {},
         edgePadding = spacing.spaceMediumLarge,
         indicator = emptyTabIndicator,
         modifier = modifier

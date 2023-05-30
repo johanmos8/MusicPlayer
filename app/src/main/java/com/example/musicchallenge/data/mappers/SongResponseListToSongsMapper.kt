@@ -33,7 +33,8 @@ class SongResponseListToSongsMapper {
                             picture_big = it.pictureBig,
                             picture_xl = it.pictureXl,
                             tracklist = it.tracklist,
-                            type = it.type
+                            type = it.type,
+                            radio = false
                         )
                     },
 

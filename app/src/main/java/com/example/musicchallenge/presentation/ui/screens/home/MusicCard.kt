@@ -26,12 +26,13 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.musicchallenge.R
 import com.example.musicchallenge.domain.models.Song
+import com.example.musicchallenge.domain.models.Track
 import com.example.musicchallenge.presentation.ui.screens.home.HomeViewModel
 import com.example.musicchallenge.presentation.ui.theme.typography
 
 @Composable
 fun MusicCard(
-    song: Song,
+    song: Track,
     homeViewModel: HomeViewModel,
     onClick: (Boolean) -> Unit,
     playPauseTrack: (Boolean, Boolean) -> Unit,
@@ -72,7 +73,7 @@ fun MusicCard(
 
 @Composable
 fun CardWithShape(
-    song: Song,
+    song: Track,
     modifier: Modifier
 ) {
 
@@ -90,7 +91,7 @@ fun CardWithShape(
         ) {
             Column {
                 Text(
-                    text = song.title,
+                    text = song.title?:"Unknown",
                     modifier = Modifier.requiredWidthIn(max = 140.dp),
                     style = typography.bodySmall,
                     fontWeight = FontWeight.Bold,
