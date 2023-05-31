@@ -18,6 +18,7 @@ import com.example.musicchallenge.presentation.ui.screens.home.HomeViewModel
 import com.example.musicchallenge.presentation.ui.screens.player.components.PlayerImage
 import com.example.musicchallenge.presentation.ui.theme.LocalSpacing
 import com.example.musicchallenge.presentation.util.asFormattedString
+import com.example.musicchallenge.presentation.util.convertToProgress
 
 
 @ExperimentalMaterial3Api
@@ -30,11 +31,11 @@ fun PlayerScreen(
     homeViewModel: HomeViewModel
 ) {
     val context = LocalContext.current
-    val musicState by homeViewModel.state.collectAsState()
-    val currentPosition = homeViewModel.currentPosition
+
+    val musicState by playerViewModel.musicState.collectAsState()
+    val currentPosition = playerViewModel.currentPosition.collectAsState()
     val progress by animateFloatAsState(
-        targetValue = ((currentPosition * 100f) / currentPosition / 100f).takeIf(Float::isFinite)
-            ?: 0f
+        targetValue = convertToProgress(count = currentPosition.value, total = musicState.duration)
     )
     // Pasar el contexto al ViewModel
     LaunchedEffect(Unit) {
@@ -94,13 +95,13 @@ fun PlayerScreen(
         Spacer(modifier = Modifier.height(spacing.spaceMediumLarge))
         PlayerButtons(
             modifier = Modifier.fillMaxWidth(),
-            /*playWhenReady = musicState.playWhenReady,
-            play = { viewModel.onEvent(PlayerEvent.Play) },
-            pause = { viewModel.onEvent(PlayerEvent.Pause) },
-            replay10 = { },
-            forward10 = { /*TODO*/ },
-            next = { viewModel.onEvent(PlayerEvent.SkipNext) },
-            previous = { viewModel.onEvent(PlayerEvent.SkipPrevious) }*/
+            playWhenReady = false,
+            play = { playerViewModel.onEvent(PlayerEvent.Play) },
+            pause = { playerViewModel.onEvent(PlayerEvent.Pause) },
+            next = { playerViewModel.onEvent(PlayerEvent.SkipNext) },
+            previous = { playerViewModel.onEvent(PlayerEvent.SkipPrevious) },
+            repeat = { playerViewModel.onEvent(PlayerEvent.Repeat) },
+            shuffle = { playerViewModel.onEvent(PlayerEvent.Shuffle) }
         )
         Spacer(modifier = Modifier.height(spacing.spaceExtraLarge))
         Slider(
@@ -113,14 +114,11 @@ fun PlayerScreen(
                 .fillMaxWidth()
                 .padding(horizontal = spacing.spaceMedium)
         ) {
-            Text(currentPosition.asFormattedString())//"${musicState.duration}")//currentPosition.asFormattedString())
+            Text(currentPosition.value.asFormattedString())//"${musicState.duration}")//currentPosition.asFormattedString())
             Spacer(modifier = Modifier.weight(1f))
             musicState.currentSong?.duration?.asFormattedString()?.let { Text(it) }
         }
         Spacer(modifier = androidx.compose.ui.Modifier.height(spacing.spaceMediumLarge))
-        Button(onClick = { homeViewModel.startPlayback() }) {
-            Text("Start Playback")
-        }
 
     }
 }

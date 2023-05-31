@@ -4,20 +4,45 @@ import android.net.Uri
 import android.provider.MediaStore.Audio.Media
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
+import com.example.musicchallenge.domain.models.Album
+import com.example.musicchallenge.domain.models.Artist
 import com.example.musicchallenge.domain.models.Song
+import com.example.musicchallenge.domain.utils.Constants.DEFAULT_ALBUM_ID
+import com.example.musicchallenge.domain.utils.Constants.DEFAULT_ARTIST_ID
+import com.example.musicchallenge.domain.utils.Constants.DEFAULT_MEDIA_ID
+import com.example.musicchallenge.exoplayer.ALBUM_ID
+import com.example.musicchallenge.exoplayer.ARTIST_ID
 import com.example.musicchallenge.exoplayer.buildPlayableMediaItem
 
 
-internal fun Song.asMediaItem()=
+internal fun Song.asMediaItem() =
     buildPlayableMediaItem(
         mediaId = this.id.toString(),
         artistId = this.artist?.id,
         albumId = this.album?.id,
         mediaUri = Uri.parse(this.preview),
-        artworkUri = Uri.parse(this.album?.cover),
+        //artworkUri = Uri.parse(this.album?.cover)?:Uri.EMPTY,
         title = this.title,
         artist = artist?.name
     )
+
+internal fun MediaItem?.asSong() = Song(
+    id = this?.mediaId?.toLong() ?: DEFAULT_MEDIA_ID,
+    artist = null,
+    album = null,
+    preview = this?.requestMetadata?.mediaUri.toString(),
+    title = this?.mediaMetadata?.title.toString(),
+    title_short = null,
+    title_version = null,
+    link = null,
+    duration = null,
+    rank = null,
+    explicit_lyrics = false,
+    explicit_content_lyrics = null,
+    explicit_content_cover = null,
+    md5_image = null,
+    type = null,
+)
 
 /*
 internal fun Song.asSongModel() = SongModel(
@@ -31,16 +56,7 @@ internal fun Song.asSongModel() = SongModel(
     album = album
 )
 
-internal fun MediaItem?.asSong() = Song(
-    id = this?.mediaId?.toInt() ?: DEFAULT_MEDIA_ID,
-    artistId = this?.mediaMetadata?.extras?.getLong(ARTIST_ID) ?: DEFAULT_ARTIST_ID,
-    albumId = this?.mediaMetadata?.extras?.getLong(ALBUM_ID) ?: DEFAULT_ALBUM_ID,
-    mediaUri = this?.requestMetadata?.mediaUri.orEmpty(),
-    artworkUri = this?.mediaMetadata?.artworkUri.orEmpty(),
-    title = this?.mediaMetadata?.title.orEmpty(),
-    artist = this?.mediaMetadata?.artist.orEmpty(),
-    album = this?.mediaMetadata?.albumTitle.orEmpty()
-)
+
 
 
 fun SongModel.asSong() = Song(

@@ -11,7 +11,7 @@ data class Chart(
 )
 
 data class TracksData(
-    val data: List<Track>,
+    val data: List<Song>,
     val total: Int?
 )
 

@@ -1,5 +1,6 @@
 package com.example.musicchallenge.presentation.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -25,7 +26,7 @@ fun HomeScreen(
 ) {
 
     val viewState by homeViewModel.state.collectAsState()
-    //val songs by homeViewModel.songs.collectAsState() // Collect the flow as a state
+    val mainSongsList by homeViewModel.mainListSongs.collectAsState() // Collect the flow as a state
     val genres by homeViewModel.genres.collectAsState()
     val chart by homeViewModel.chart.collectAsState()
     val songs = chart?.tracks
@@ -51,12 +52,13 @@ fun HomeScreen(
                 text = "Trending right now",
                 style = MaterialTheme.typography.headlineLarge
             )
-            songs?.data?.let { it1 ->
+            mainSongsList?.let { it1 ->
                 SongList(
                     songs = it1,
                     navigateToPlayer = navigateToPlayer,
-                    homeViewModel = homeViewModel, playerViewModel = playerViewModel
-                )
+                    homeViewModel = homeViewModel, playerViewModel = playerViewModel,
+
+                    )
             }
 
             if (genres.isNotEmpty()) {
@@ -75,30 +77,30 @@ fun HomeScreen(
 
 @Composable
 fun SongList(
-    songs: List<Track>,
+    songs: List<Song>,
     navigateToPlayer: () -> Unit,
     homeViewModel: HomeViewModel,
     playerViewModel: PlayerViewModel
 ) {
 
     LazyRow {
-        itemsIndexed(songs) { index: Int, song: Track ->
+        itemsIndexed(songs) { index: Int, song: Song ->
             MusicCard(
                 song = song,
-                onClick = {
-                    homeViewModel.onSongSelected(song)
+                onClick = { isRunning ->
+                    if (!isRunning)
+                        homeViewModel.onEvent(
+                            HomeEvents.PlaySound(
+                                isRunning = false,
+                                playWhenReady = false,
+                                idx = index,
+                                song=song
+                            )
+                        )
                     navigateToPlayer()
                 },
                 homeViewModel = homeViewModel,
-                playPauseTrack = { isRunning, playWhenReady ->
-                    homeViewModel.onEvent(
-                        HomeEvents.PlaySound(
-                            isRunning,
-                            playWhenReady,
-                            index
-                        )
-                    )
-                },
+
                 backgroundColor = MaterialTheme.colorScheme.surface
 
             )

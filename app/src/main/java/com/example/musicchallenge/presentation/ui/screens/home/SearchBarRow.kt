@@ -29,6 +29,7 @@ fun SearchBarRow(homeViewModel: HomeViewModel) {
         onQueryChange = homeViewModel::onSearchTextChange,
         onSearch = {
             active = false
+
         },
         active = active,
         onActiveChange = {

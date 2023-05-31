@@ -34,8 +34,8 @@ class ChartResponseToChartMapper @Inject constructor() {
         )
     }
 
-    private fun mapTrack(trackDto: TrackDto): Track {
-        return Track(
+    private fun mapTrack(trackDto: TrackDto): Song {
+        return Song(
             id = trackDto.id,
             title = trackDto.title,
             title_short = trackDto.titleShort,

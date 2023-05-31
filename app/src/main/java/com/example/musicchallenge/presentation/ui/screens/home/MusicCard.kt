@@ -1,5 +1,6 @@
 package com.example.musicchallenge.presentation.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -32,10 +33,9 @@ import com.example.musicchallenge.presentation.ui.theme.typography
 
 @Composable
 fun MusicCard(
-    song: Track,
+    song: Song,
     homeViewModel: HomeViewModel,
     onClick: (Boolean) -> Unit,
-    playPauseTrack: (Boolean, Boolean) -> Unit,
     backgroundColor: Color = Color.Transparent
 ) {
     val musicState by homeViewModel.state.collectAsState()
@@ -46,7 +46,11 @@ fun MusicCard(
     Box(
         modifier = Modifier
             .padding(5.dp)
-            .clickable { onClick(true) }
+            .clickable {
+                Log.d("HomeViewModel", "Click en PlaySound-Card")
+                onClick(false)
+                Log.d("HomeViewModel", "Click en PlaySound-Card2")
+            }
 
     ) {
         AsyncImage(
@@ -73,7 +77,7 @@ fun MusicCard(
 
 @Composable
 fun CardWithShape(
-    song: Track,
+    song: Song,
     modifier: Modifier
 ) {
 
@@ -91,7 +95,7 @@ fun CardWithShape(
         ) {
             Column {
                 Text(
-                    text = song.title?:"Unknown",
+                    text = song.title ?: "Unknown",
                     modifier = Modifier.requiredWidthIn(max = 140.dp),
                     style = typography.bodySmall,
                     fontWeight = FontWeight.Bold,
@@ -106,7 +110,9 @@ fun CardWithShape(
                         painter = painterResource(id = R.drawable.ic_music_note),
                         contentDescription = "Play",
                         tint = Color.White,
-                        modifier = Modifier.size(15.dp).fillMaxSize()
+                        modifier = Modifier
+                            .size(15.dp)
+                            .fillMaxSize()
                     )
                     Text(
                         text = song.title_short ?: "",

@@ -15,6 +15,7 @@ import com.example.musicchallenge.domain.usesCases.PlayListUseCase
 import com.example.musicchallenge.domain.usesCases.PlayPauseListUseCase
 import com.example.musicchallenge.domain.utils.Constants
 import com.example.musicchallenge.domain.utils.Resource
+import com.example.musicchallenge.exoplayer.MusicServiceConnection
 import com.example.musicchallenge.presentation.ui.screens.player.PlayerEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,7 @@ class HomeViewModel @Inject constructor(
     private var musicUseCase: MusicUseCase,
     private val playPauseListUseCase: PlayPauseListUseCase,
     private val playListUseCase: PlayListUseCase,
+    private val musicServiceConnection: MusicServiceConnection
 ) : ViewModel() {
 
 
@@ -42,6 +44,9 @@ class HomeViewModel @Inject constructor(
 
     private val _songs = MutableStateFlow<List<Song>>(emptyList())//listOf<Song>())
     val songs: StateFlow<List<Song>> = _songs
+
+    private val _mainListsongs = MutableStateFlow<List<Song>>(emptyList())//listOf<Song>())
+    val mainListSongs: StateFlow<List<Song>> = _mainListsongs
 
     private val _genres = MutableStateFlow<List<Genre>>(emptyList())
     val genres: StateFlow<List<Genre>> = _genres
@@ -69,7 +74,6 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
-        getSongsBySearch("Muse")
         getGenres()
         getChart()
         viewModelScope.launch {
@@ -95,7 +99,7 @@ class HomeViewModel @Inject constructor(
             when (val response = musicUseCase.getChart()) {
                 is Resource.Success -> {
                     _chart.value = response.data
-
+                    _mainListsongs.value = response.data?.tracks?.data ?: emptyList()
                 }
                 is Resource.Error -> _state.value = _state.value.copy(
                     progressBarVisible = false,
@@ -109,8 +113,25 @@ class HomeViewModel @Inject constructor(
         this.context = context
     }
 
-    fun onSearchTextChange(text: String) {
-        _searchText.value = text
+    fun onSearchTextChange(query: String) {
+        Log.d("Searching", "$query:String")
+        _searchText.value = query
+        if (query.isNotEmpty()) {
+            getSongsBySearch(query)
+        } else {
+            getChart()
+        }
+
+        Log.d("Searching", "${_songs.value}")
+        if (_songs.value.isNotEmpty()) {
+            _mainListsongs.value = _songs.value
+        } else {
+            _chart.value?.let {
+
+                _mainListsongs.value = it.tracks?.data ?: emptyList()
+            }
+        }
+
     }
 
     fun getSongsBySearch(query: String) {
@@ -165,9 +186,11 @@ class HomeViewModel @Inject constructor(
                     isRunning = event.isRunning,
                     playWhenReady = event.playWhenReady,
                     startIndex = event.idx,
-                    list = emptyList()
-                )
-                startPlayback()
+                    list = _mainListsongs.value,
+
+                    )
+                onSongSelected(event.song)
+                Log.d("HomeViewModel", "Click en PlaySound")
             }
             //is HomeEvents.PlaySound -> startPlayback()
 /*            is HomeEvents.OnSelectGenre -> {
@@ -187,8 +210,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onSongSelected(song: Track) {
-        Log.d("OnSelected", "${_state.value.currentSong}")
+    fun onSongSelected(song: Song) {
 
         _state.update { currentState ->
             _state.value.copy(
@@ -221,6 +243,6 @@ data class HomeViewState(
     val songsList: List<Song> = emptyList(),
     val genres: List<Genre> = emptyList(),
     val selectedGenre: Genre? = null,
-    val currentSong: Track? = null,
+    val currentSong: Song? = null,
 
-)
+    )

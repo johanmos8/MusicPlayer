@@ -19,10 +19,10 @@ class   PlayPauseListUseCase @Inject constructor(private val musicServiceConnect
                 musicServiceConnection.pause()
             }
         } else {
-           /* musicServiceConnection.playSongs(
-                songs = list.map { it.asSong() },
+           musicServiceConnection.playSongs(
+                songs = list.map { it },
                 startIndex = startIndex
-            )*/
+            )
         }
     }
 }
