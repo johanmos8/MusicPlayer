@@ -1,5 +1,6 @@
 package com.example.musicchallenge.presentation.ui.screens.player
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import com.example.musicchallenge.presentation.ui.PlayerButtons
 import com.example.musicchallenge.presentation.ui.screens.home.HomeViewModel
 import com.example.musicchallenge.presentation.ui.screens.player.components.PlayerImage
 import com.example.musicchallenge.presentation.ui.theme.LocalSpacing
@@ -66,8 +66,9 @@ fun PlayerScreen(
         PlayerImage(
             modifier = Modifier
                 .fillMaxWidth(),
-            trackImageUrl = musicState.currentSong?.artist?.picture,
+            trackImageUrl = musicState.currentSong?.album?.cover,
         )
+        Log.d("PlayerVM", "$musicState.currentSong")
         Spacer(modifier = Modifier.height(spacing.spaceMediumLarge))
         musicState.currentSong?.let {
             Text(
@@ -95,7 +96,7 @@ fun PlayerScreen(
         Spacer(modifier = Modifier.height(spacing.spaceMediumLarge))
         PlayerButtons(
             modifier = Modifier.fillMaxWidth(),
-            playWhenReady = false,
+            playWhenReady = musicState.playWhenReady,
             play = { playerViewModel.onEvent(PlayerEvent.Play) },
             pause = { playerViewModel.onEvent(PlayerEvent.Pause) },
             next = { playerViewModel.onEvent(PlayerEvent.SkipNext) },

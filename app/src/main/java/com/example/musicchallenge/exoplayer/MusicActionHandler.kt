@@ -7,10 +7,10 @@ import androidx.media3.common.Player
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaSession
 import androidx.media3.session.SessionCommand
-import com.aminovic.loula.domain.utils.common.MusicCommands.REPEAT
-import com.aminovic.loula.domain.utils.common.MusicCommands.REPEAT_ONE
-import com.aminovic.loula.domain.utils.common.MusicCommands.REPEAT_SHUFFLE
-import com.aminovic.loula.domain.utils.common.MusicCommands.SHUFFLE
+import com.example.musicchallenge.domain.utils.common.MusicCommands.REPEAT
+import com.example.musicchallenge.domain.utils.common.MusicCommands.REPEAT_ONE
+import com.example.musicchallenge.domain.utils.common.MusicCommands.REPEAT_SHUFFLE
+import com.example.musicchallenge.domain.utils.common.MusicCommands.SHUFFLE
 import com.example.musicchallenge.R
 import com.example.musicchallenge.exoplayer.util.Constants.UNHANDLED_STATE_ERROR_MESSAGE
 import com.example.musicchallenge.exoplayer.util.Constants.UNKNOWN_CUSTOM_ACTION_ERROR_MESSAGE

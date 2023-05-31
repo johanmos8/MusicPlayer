@@ -1,4 +1,4 @@
-package com.aminovic.loula.domain.utils.common
+package com.example.musicchallenge.domain.utils.common
 
 import android.content.Context
 import android.graphics.Bitmap

@@ -1,4 +1,4 @@
-package com.example.musicchallenge.presentation.ui
+package com.example.musicchallenge.presentation.ui.screens.player
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.spring
@@ -73,10 +73,10 @@ fun PlayerButtons(
 
         Crossfade(targetState = playWhenReady, animationSpec = spring()) { targetPlayWhenReady ->
             if (targetPlayWhenReady) {
-                IconButton(onClick = { pause}) {
+                IconButton(onClick =  pause) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_pause_circle_filled_24),
-                        contentDescription = stringResource(R.string.play),
+                        contentDescription = stringResource(R.string.pause),
                         contentScale = ContentScale.Fit,
                         colorFilter = ColorFilter.tint(Color.White),
                         modifier = Modifier
@@ -85,7 +85,7 @@ fun PlayerButtons(
                     )
                 }
             } else {
-                IconButton(onClick = { play}) {
+                IconButton(onClick =  play) {
                     Image(
                         painter = painterResource(id = R.drawable.play_circle_filled_24),
                         contentDescription = stringResource(R.string.play),
@@ -98,7 +98,7 @@ fun PlayerButtons(
                 }
             }
         }
-        IconButton(onClick = { next }) {
+        IconButton(onClick =  next ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_skip_next_24),
                 contentDescription = stringResource(R.string.skip_next),
@@ -107,7 +107,7 @@ fun PlayerButtons(
                 modifier = buttonsModifier
             )
         }
-        IconButton(onClick = { shuffle }) {
+        IconButton(onClick =  shuffle ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_shuffle_24),
                 contentDescription = stringResource(R.string.shuffle),

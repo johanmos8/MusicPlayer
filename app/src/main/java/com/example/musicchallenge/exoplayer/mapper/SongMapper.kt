@@ -1,8 +1,6 @@
 package com.example.musicchallenge.exoplayer.mapper
 
 import android.net.Uri
-import android.provider.MediaStore.Audio.Media
-import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import com.example.musicchallenge.domain.models.Album
 import com.example.musicchallenge.domain.models.Artist
@@ -21,15 +19,18 @@ internal fun Song.asMediaItem() =
         artistId = this.artist?.id,
         albumId = this.album?.id,
         mediaUri = Uri.parse(this.preview),
-        //artworkUri = Uri.parse(this.album?.cover)?:Uri.EMPTY,
+        artworkUri = Uri.parse(this.album?.cover) ?: Uri.EMPTY,
         title = this.title,
-        artist = artist?.name
+        artist = artist?.id.toString()
     )
 
 internal fun MediaItem?.asSong() = Song(
     id = this?.mediaId?.toLong() ?: DEFAULT_MEDIA_ID,
-    artist = null,
-    album = null,
+    artist = Artist(id = this?.mediaMetadata?.extras?.getLong(ARTIST_ID) ?: DEFAULT_ARTIST_ID),
+    album = Album(
+        id = this?.mediaMetadata?.extras?.getLong(ALBUM_ID) ?: DEFAULT_ALBUM_ID,
+        cover = this?.mediaMetadata?.artworkUri.toString()
+    ),
     preview = this?.requestMetadata?.mediaUri.toString(),
     title = this?.mediaMetadata?.title.toString(),
     title_short = null,

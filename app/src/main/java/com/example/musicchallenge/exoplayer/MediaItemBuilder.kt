@@ -11,6 +11,7 @@ internal fun buildPlayableMediaItem(
     artistId: Long?,
     albumId: Long?,
     mediaUri: Uri,
+    artworkUri: Uri,
     title: String?,
     artist: String?
 ) = MediaItem.Builder()
@@ -22,6 +23,7 @@ internal fun buildPlayableMediaItem(
     )
     .setMediaMetadata(
         MediaMetadata.Builder()
+            .setArtworkUri(artworkUri)
             .setTitle(title)
             .setArtist(artist)
             .setFolderType(MediaMetadata.FOLDER_TYPE_NONE)

@@ -1,4 +1,4 @@
-package com.aminovic.loula.domain.utils.common
+package com.example.musicchallenge.domain.utils.common
 
 import android.content.Context
 import androidx.media3.common.Player

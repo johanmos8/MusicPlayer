@@ -33,18 +33,6 @@ class PlayerViewModel @Inject constructor(
             .build()
     }
 
-    init {
-        viewModelScope.launch {
-            musicServiceConnection.musicState.collect { musicState ->
-
-                Log.d("PlayerVM: ","${musicServiceConnection.musicState.value}")
-            }
-        }
-    }
-    fun initialize(context: Context) {
-        this.context = context
-    }
-
     fun onEvent(event: PlayerEvent) {
         when (event) {
             is PlayerEvent.Play -> play()
@@ -63,11 +51,6 @@ class PlayerViewModel @Inject constructor(
     fun repeat() = musicServiceConnection.repeat()
     fun shuffle() = musicServiceConnection.shuffle()
 
-
-    fun stopPlayback() {
-        // Lógica para detener la reproducción
-        player.playWhenReady = false
-    }
 
     override fun onCleared() {
         super.onCleared()

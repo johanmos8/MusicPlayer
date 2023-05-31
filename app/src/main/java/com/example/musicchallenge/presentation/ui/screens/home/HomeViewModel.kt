@@ -182,6 +182,8 @@ class HomeViewModel @Inject constructor(
     fun onEvent(event: HomeEvents) {
         when (event) {
             is HomeEvents.PlaySound -> {
+                Log.d("HomeViewModel", "${_mainListsongs.value}")
+
                 playPauseListUseCase(
                     isRunning = event.isRunning,
                     playWhenReady = event.playWhenReady,

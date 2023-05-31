@@ -1,4 +1,4 @@
-package com.aminovic.loula.domain.utils.common
+package com.example.musicchallenge.domain.utils.common
 
 object MusicCommands {
     const val REPEAT_SHUFFLE = "repeat_shuffle"

@@ -15,9 +15,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaNotification
 import androidx.media3.session.MediaSession
-import androidx.media3.session.MediaStyleNotificationHelper.MediaStyle
-import com.aminovic.loula.domain.utils.common.MusicActions
-import com.aminovic.loula.domain.utils.common.asArtworkBitmap
 import com.example.musicchallenge.R
 import com.example.musicchallenge.presentation.util.AppIcons
 import com.google.common.collect.ImmutableList
@@ -85,8 +82,7 @@ import javax.inject.Inject
         }
 
         val notificationChannel = NotificationChannel(
-            MusicNotificationChannelId,
-            context.getString(R.string.music_notification_channel_name),
+            MusicNotificationChannelId,"Globant-Challenge" ,
             NotificationManager.IMPORTANCE_LOW
         )
         notificationManager.createNotificationChannel(notificationChannel)

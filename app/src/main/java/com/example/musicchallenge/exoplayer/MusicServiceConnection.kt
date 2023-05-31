@@ -44,11 +44,6 @@ class MusicServiceConnection @Inject constructor(
         }
     }
 
-    fun skipPrevious() = mediaBrowser?.run {
-        seekToPrevious()
-        play()
-    }
-
     init {
         coroutineScope.launch {
             mediaBrowser = MediaBrowser.Builder(
@@ -66,7 +61,10 @@ class MusicServiceConnection @Inject constructor(
         seekToNext()
         play()
     }
-
+    fun skipPrevious() = mediaBrowser?.run {
+        seekToPrevious()
+        play()
+    }
     fun shuffle() = mediaBrowser?.run {
         shuffleModeEnabled = !shuffleModeEnabled
     }

@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">MusicChallenge</string>
-    <string name="title_activity_main2">MainActivity2</string>
     <string name="search_button">search button</string>
     <string name="profile_button">profile button</string>
-    <string name="discover">Discover</string>
     <string name="your_library">Your library</string>
     <string name="play">play</string>
     <string name="add">add</string>
@@ -21,6 +19,5 @@
     <string name="skip_previous">Skip to previous</string>
     <string name="pause">Pause</string>
     <string name="skip_next">Skip to next</string>
-    <string name="music_notification_channel_name">Loula Muzika</string>
     <string name="player_timestamp_format" translatable="false">%1$s:%2$s</string>
 </resources>
