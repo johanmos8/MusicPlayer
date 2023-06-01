@@ -1,11 +1,12 @@
-package com.example.musicchallenge.data.api.repositories
+package com.example.musicchallenge.data.repositories
 
-import android.util.Log
-import com.example.musicchallenge.data.remotedatasource.api.SongApiService
-import com.example.musicchallenge.data.mappers.SongResponseListToSongsMapper
+
+import com.example.musicchallenge.data.localdatasource.MusicLocalDataSource
+import com.example.musicchallenge.data.mappers.*
 import com.example.musicchallenge.data.remotedatasource.MusicRemoteDataSource
-import com.example.musicchallenge.domain.models.Song
+import com.example.musicchallenge.domain.models.*
 import com.example.musicchallenge.domain.repositories.ISongRepository
+import com.example.musicchallenge.domain.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,13 +16,13 @@ import javax.inject.Inject
 
 class SongRepositoryImpl @Inject constructor(
     private val remoteDataSource: MusicRemoteDataSource,
-    private val songListMapper: SongResponseListToSongsMapper
+    private val localDataSource: MusicLocalDataSource,
+    private val songListMapper: SongResponseListToSongsMapper,
+    private val genreDTOToGenreMapper: GenreDTOListToGenreMapper,
+    private val chartResponseToChartMapper: ChartResponseToChartMapper,
+    private val favoriteSongToSongMapper: FavoriteSongToSongMapper
 ) : ISongRepository {
     override suspend fun getSongById(): Song {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getPopularSongs(): List<Song> {
         TODO("Not yet implemented")
     }
 
@@ -32,4 +33,48 @@ class SongRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun getGenres(): Resource<List<Genre>> {
+        return try {
+            val response = remoteDataSource.getGenres()
+            val body = response.body()
+            if (body != null && response.isSuccessful) {
+                Resource.Success(genreDTOToGenreMapper(body.data))
+            } else {
+                Resource.Error("something went wrong")
+            }
+        } catch (error: Exception) {
+            Resource.Error(error.message.toString())
+        }
+
+    }
+
+    override suspend fun getChart(): Resource<Chart> {
+
+        return try {
+            val response = remoteDataSource.getChart()
+            val body = response.body()
+            if (body != null && response.isSuccessful) {
+                // Mapeo de la respuesta a los modelos de datos de la capa de dominio
+                Resource.Success(chartResponseToChartMapper(body))
+            } else {
+                Resource.Error("something went wrong")
+            }
+        } catch (error: Exception) {
+            Resource.Error(error.message.toString())
+        }
+
+    }
+
+    override suspend fun getFavoriteSongs(): Flow<List<Song>> {
+        return localDataSource.getFavoriteSongs().map { favoriteSongsData  ->
+            favoriteSongsData.toSongList()
+        }
+
+    }
+
+    override suspend fun saveFavoriteSong(song: Song) {
+
+        val response = localDataSource.addFavoriteSong(song)
+
+    }
 }

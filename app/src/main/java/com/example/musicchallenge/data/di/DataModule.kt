@@ -1,18 +1,25 @@
 package com.example.musicchallenge.data.di
 
+import android.content.Context
 import com.example.movies.data.utils.StringUtils
 import com.example.musicchallenge.BuildConfig
-import com.example.musicchallenge.data.api.repositories.SongRepositoryImpl
+import com.example.musicchallenge.data.localdatasource.MusicLocalDataSource
+import com.example.musicchallenge.data.localdatasource.MusicLocalDataSourceImpl
+import com.example.musicchallenge.data.mappers.ChartResponseToChartMapper
+import com.example.musicchallenge.data.mappers.FavoriteSongToSongMapper
+import com.example.musicchallenge.data.mappers.GenreDTOListToGenreMapper
 import com.example.musicchallenge.data.mappers.SongResponseListToSongsMapper
 import com.example.musicchallenge.data.remotedatasource.MusicRemoteDataSource
-import com.example.musicchallenge.data.remotedatasource.api.SongApiService
 import com.example.musicchallenge.data.remotedatasource.MusicRemoteDataSourceImpl
+import com.example.musicchallenge.data.remotedatasource.api.SongApiService
+import com.example.musicchallenge.data.repositories.SongRepositoryImpl
 import com.example.musicchallenge.domain.repositories.ISongRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -90,6 +97,23 @@ object DataModule {
         return SongResponseListToSongsMapper()
     }
 
+    @Provides
+    @Singleton
+    fun provideGenreDTOListToGenreMapper(): GenreDTOListToGenreMapper {
+        return GenreDTOListToGenreMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun provideChartResponseToChartMapper(): ChartResponseToChartMapper {
+        return ChartResponseToChartMapper()
+    }
+    @Provides
+    @Singleton
+    fun provideFavoriteSongToSongMapper(): FavoriteSongToSongMapper {
+        return FavoriteSongToSongMapper()
+    }
+
     @Singleton
     @Provides
     fun provideMusicRemoteDataSource(
@@ -99,6 +123,15 @@ object DataModule {
             songApiService
         )
     }
+
+    @Singleton
+    @Provides
+    fun provideMusicLocalDataSource(
+        @ApplicationContext context: Context
+    ): MusicLocalDataSource {
+        return MusicLocalDataSourceImpl(context)
+    }
+
 }
 
 
@@ -109,15 +142,23 @@ object ISongRepositoryModule {
     @Singleton
     @Provides
     fun provideISongRepository(
-        musicRemoteDataSource: MusicRemoteDataSource,
-        songResponseListToSongMapper: SongResponseListToSongsMapper
 
+        musicRemoteDataSource: MusicRemoteDataSource,
+        musicLocalDataSource: MusicLocalDataSource,
+        songResponseListToSongMapper: SongResponseListToSongsMapper,
+        genreDTOListToGenreMapper: GenreDTOListToGenreMapper,
+        chartResponseToChartMapper: ChartResponseToChartMapper,
+        favoriteSongToSongMapper: FavoriteSongToSongMapper
     ): ISongRepository {
         return SongRepositoryImpl(
             musicRemoteDataSource,
-            songResponseListToSongMapper
-
+            musicLocalDataSource,
+            songResponseListToSongMapper,
+            genreDTOListToGenreMapper,
+            chartResponseToChartMapper,
+            favoriteSongToSongMapper
         )
     }
-}
 
+
+}

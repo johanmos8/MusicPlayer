@@ -1,6 +1,6 @@
 package com.example.musicchallenge.data.mappers
 
-import com.example.musicchallenge.data.remotedatasource.models.SearchResponse
+import com.example.musicchallenge.data.remotedatasource.dto.SearchResponse
 import com.example.musicchallenge.domain.models.Artist
 import com.example.musicchallenge.domain.models.Song
 
@@ -33,7 +33,8 @@ class SongResponseListToSongsMapper {
                             picture_big = it.pictureBig,
                             picture_xl = it.pictureXl,
                             tracklist = it.tracklist,
-                            type = it.type
+                            type = it.type,
+                            radio = false
                         )
                     },
 
