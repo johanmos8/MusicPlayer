@@ -13,6 +13,7 @@ import com.example.musicchallenge.domain.usesCases.MusicUseCase
 import com.example.musicchallenge.domain.usesCases.PlayListUseCase
 import com.example.musicchallenge.domain.usesCases.PlayPauseListUseCase
 import com.example.musicchallenge.domain.usesCases.favorite.GetAllFavoriteSongsUseCase
+import com.example.musicchallenge.domain.usesCases.favorite.RemoveFavoriteSongUseCase
 import com.example.musicchallenge.domain.usesCases.favorite.SaveFavoriteSongUseCase
 import com.example.musicchallenge.domain.utils.Resource
 import com.example.musicchallenge.exoplayer.MusicServiceConnection
@@ -32,7 +33,8 @@ class HomeViewModel @Inject constructor(
     private val playListUseCase: PlayListUseCase,
     private val musicServiceConnection: MusicServiceConnection,
     private val getAllFavoriteSongsUseCase: GetAllFavoriteSongsUseCase,
-    private val saveFavoriteSongUseCase: SaveFavoriteSongUseCase
+    private val saveFavoriteSongUseCase: SaveFavoriteSongUseCase,
+    private val removeFavoriteSongUseCase: RemoveFavoriteSongUseCase
 ) : ViewModel() {
 
 
@@ -57,6 +59,10 @@ class HomeViewModel @Inject constructor(
 
     private val _favoritetsongs = MutableStateFlow<List<Song>>(emptyList())//listOf<Song>())
     val favoritetsongs: StateFlow<List<Song>> = _favoritetsongs
+
+    private val _songsByGenreList = MutableStateFlow<List<Song>>(emptyList())//listOf<Song>())
+    val songsByGenreList: StateFlow<List<Song>> = _songsByGenreList
+
 
     private val _selectedGenre = MutableStateFlow<Genre?>(null)
 
@@ -102,7 +108,11 @@ class HomeViewModel @Inject constructor(
             saveFavoriteSongUseCase.invoke(song)
         }
     }
-
+    fun removeFavoriteSong(song: Song) {
+        viewModelScope.launch {
+            removeFavoriteSongUseCase.invoke(song)
+        }
+    }
     fun getAllObjects() {
         viewModelScope.launch {
          getAllFavoriteSongsUseCase.invoke().collect{songs ->

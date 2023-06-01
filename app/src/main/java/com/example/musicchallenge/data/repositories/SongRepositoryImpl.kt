@@ -77,4 +77,9 @@ class SongRepositoryImpl @Inject constructor(
         val response = localDataSource.addFavoriteSong(song)
 
     }
+    override suspend fun removeFavoriteSong(song: Song) {
+
+        val response = localDataSource.removeFavoriteSong(song)
+
+    }
 }

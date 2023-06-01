@@ -11,6 +11,7 @@ import com.example.musicchallenge.FavoriteSongsData
 import com.example.musicchallenge.data.di.ISongRepositoryModule
 import com.example.musicchallenge.data.localdatasource.proto.FavoriteSongSerializer
 import com.example.musicchallenge.data.localdatasource.proto.FavoriteSongsDataSerializer
+import com.example.musicchallenge.data.mappers.toFavoriteSong
 //import com.example.musicchallenge.data.localdatasource.proto.FavoriteSongSerializer
 import com.example.musicchallenge.domain.models.Album
 import com.example.musicchallenge.domain.models.Artist
@@ -35,26 +36,32 @@ class MusicLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun addFavoriteSong(song: Song) {
-        val newSong=FavoriteSong.newBuilder().setId(song.id)
+        val newSong = FavoriteSong.newBuilder().setId(song.id)
             .setTitle(song.title)
             //.setTitleVersion(song.title_version)
             //.setTitleShort(song.title_short)
             .setPreview(song.preview)
             .build()
 
-            context.songProtoDataStore.updateData { songLists ->
-                if (songLists.toBuilder().songsList.contains(newSong)) {
-                    songLists
-                } else {
-                    songLists.toBuilder().addSongs(newSong).build()
-                }
+        context.songProtoDataStore.updateData { songLists ->
+            if (songLists.toBuilder().songsList.contains(newSong)) {
+                songLists
+            } else {
+                songLists.toBuilder().addSongs(newSong).build()
             }
+        }
 
 
     }
 
     override suspend fun removeFavoriteSong(song: Song) {
-        TODO("Not yet implemented")
+        context.songProtoDataStore.updateData { songData ->
+            val updatedSongsList = songData.toBuilder()
+                .removeSongs(songData.songsList.indexOf(song.toFavoriteSong())) // Eliminar la canción de la lista
+                .build()
+
+            updatedSongsList
+        }
     }
 
 

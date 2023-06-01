@@ -71,8 +71,13 @@ fun MusicCard(
                 .align(Alignment.TopEnd)
                 .padding(top = 5.dp, end = 5.dp)
                 .clickable {
+
+                    if(isFav){
+                        homeViewModel.saveFavoriteSong(song)
+                    }else{
+                        homeViewModel.removeFavoriteSong(song)
+                    }
                     isFav = !isFav
-                    homeViewModel.saveFavoriteSong(song)
                 }
 
         )

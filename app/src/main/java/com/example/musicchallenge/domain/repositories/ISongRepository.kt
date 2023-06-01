@@ -14,4 +14,6 @@ interface ISongRepository {
     suspend fun getChart(): Resource<Chart>
     suspend fun getFavoriteSongs(): Flow<List<Song>>
     suspend fun saveFavoriteSong(song: Song)
+    suspend fun removeFavoriteSong(song: Song)
+
 }

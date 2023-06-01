@@ -62,7 +62,7 @@ fun FavoriteScreen(
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(width = 250.dp, height = 200.dp)
+                            .size(width = 200.dp, height = 150.dp)
                             .clip(RoundedCornerShape(20.dp))
 
                     )

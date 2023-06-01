@@ -54,6 +54,15 @@ fun FavoriteSong.toSong() = Song(
     type = this.type,
     album = null
 )
+fun Song.toFavoriteSong(): FavoriteSong {
+    return FavoriteSong.newBuilder()
+        .setId(id)
+        .setTitle(title)
+        //.setTitleVersion(song.title_version)
+        //.setTitleShort(song.title_short)
+        .setPreview(preview)
+        .build()
+}
 
 fun FavoriteSongsData.toSongList(): List<Song> {
     return songsList.map { favoriteSong ->

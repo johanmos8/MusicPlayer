@@ -36,7 +36,7 @@ fun HomeScreen(
     val chart by homeViewModel.chart.collectAsState()
     val songs = chart?.tracks
     val selectedGenre = viewState.selectedGenre
-
+    val songsByGenreList by homeViewModel.songsByGenreList.collectAsState()
 
     Surface(
         modifier = Modifier
@@ -49,7 +49,7 @@ fun HomeScreen(
                 .padding(all = 8.dp)
                 .fillMaxWidth()
         ) {
-            HomeHeader(homeViewModel = homeViewModel, scope = scope, drawerState=drawerState)
+            HomeHeader(homeViewModel = homeViewModel, scope = scope, drawerState = drawerState)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 color = Color(0xFFFFFFFF), //TODO
@@ -72,6 +72,11 @@ fun HomeScreen(
                     genres = genres,
                     selectedGenre = selectedGenre,
                     onGenreSelected = homeViewModel::onGenreSelected
+                )
+            }
+            if (mainSongsList.isNotEmpty()) {
+                SongsByGenreList(
+                    songs=mainSongsList
                 )
             }
         }
