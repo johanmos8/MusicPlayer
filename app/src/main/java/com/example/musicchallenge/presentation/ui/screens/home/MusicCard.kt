@@ -9,9 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,18 +39,19 @@ fun MusicCard(
     val musicState by homeViewModel.state.collectAsState()
     //val currentPosition by homeViewModel.currentPosition.collectAsState()
     val isRunning = musicState.currentSong?.id == song.id
-    //musicState.playbackState.name
+    var isFav by remember{ mutableStateOf(false) }
     //Add padding around our message.
+    val icon = if (isFav) {
+        R.drawable.ic_favorite_24
+    } else {
+        R.drawable.ic_favorite_border_24
+    }
     Box(
         modifier = Modifier
             .padding(5.dp)
-            .clickable {
-                Log.d("HomeViewModel", "Click en PlaySound-Card")
-                onClick(false)
-                Log.d("HomeViewModel", "Click en PlaySound-Card2")
-            }
 
     ) {
+
         AsyncImage(
             model = song.artist?.picture,
             contentDescription = null,
@@ -62,13 +61,30 @@ fun MusicCard(
                 .clip(RoundedCornerShape(20.dp))
 
         )
+        Icon(
+            painter = painterResource(id = icon),
+            contentDescription = "Fav",
+            tint = if (isFav) Color.Red else Color.White,
+            modifier = Modifier
+                .size(40.dp)
+                .fillMaxSize()
+                .align(Alignment.TopEnd)
+                .padding(top = 5.dp, end = 5.dp)
+                .clickable {
+                    isFav = !isFav
+                    homeViewModel.saveFavoriteSong(song)
+                }
 
+        )
         CardWithShape(
             song,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .width(220.dp)
                 .padding(bottom = 10.dp)
+                .clickable {
+                    onClick(false)
+                }
 
         )
 
@@ -93,6 +109,7 @@ fun CardWithShape(
                 .padding(10.dp)
                 .fillMaxWidth()
         ) {
+
             Column {
                 Text(
                     text = song.title ?: "Unknown",

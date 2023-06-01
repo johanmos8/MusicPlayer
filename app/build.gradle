@@ -53,8 +53,10 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.compose.material3:material3-window-size-class:1.1.0'
+
     //implementation 'androidx.compose.material3:material3-window-size-class:1.1.0'
-   // implementation 'androidx.window:window:1.0.0'
+    // implementation 'androidx.window:window:1.0.0'
     //implementation 'androidx.wear.compose:compose-material3:'
     def lifecycle_version = "2.3.1"
     implementation 'androidx.core:core-ktx:1.10.1'
@@ -107,8 +109,8 @@ dependencies {
     implementation "androidx.media3:media3-exoplayer:$media3_version"
     implementation "androidx.media3:media3-exoplayer-dash:$media3_version"
 //DataStore
-    implementation  "androidx.datastore:datastore:1.0.0"
-    implementation  "com.google.protobuf:protobuf-javalite:3.18.0"
+    implementation "androidx.datastore:datastore:1.0.0"
+    implementation "com.google.protobuf:protobuf-javalite:3.18.0"
     //Guava
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4'
 
@@ -120,7 +122,7 @@ kapt {
 }
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:21.7"
+        artifact = "com.google.protobuf:protoc:3.14.0"
     }
 
     // Generates the java Protobuf-lite code for the Protobufs in this project. See

@@ -9,14 +9,13 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.example.musicchallenge.domain.models.Chart
 import com.example.musicchallenge.domain.models.Genre
 import com.example.musicchallenge.domain.models.Song
-import com.example.musicchallenge.domain.models.Track
 import com.example.musicchallenge.domain.usesCases.MusicUseCase
 import com.example.musicchallenge.domain.usesCases.PlayListUseCase
 import com.example.musicchallenge.domain.usesCases.PlayPauseListUseCase
-import com.example.musicchallenge.domain.utils.Constants
+import com.example.musicchallenge.domain.usesCases.favorite.GetAllFavoriteSongsUseCase
+import com.example.musicchallenge.domain.usesCases.favorite.SaveFavoriteSongUseCase
 import com.example.musicchallenge.domain.utils.Resource
 import com.example.musicchallenge.exoplayer.MusicServiceConnection
-import com.example.musicchallenge.presentation.ui.screens.player.PlayerEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -31,7 +30,9 @@ class HomeViewModel @Inject constructor(
     private var musicUseCase: MusicUseCase,
     private val playPauseListUseCase: PlayPauseListUseCase,
     private val playListUseCase: PlayListUseCase,
-    private val musicServiceConnection: MusicServiceConnection
+    private val musicServiceConnection: MusicServiceConnection,
+    private val getAllFavoriteSongsUseCase: GetAllFavoriteSongsUseCase,
+    private val saveFavoriteSongUseCase: SaveFavoriteSongUseCase
 ) : ViewModel() {
 
 
@@ -54,6 +55,8 @@ class HomeViewModel @Inject constructor(
     private val _chart = MutableStateFlow<Chart?>(null)
     val chart: MutableStateFlow<Chart?> = _chart
 
+    private val _favoritetsongs = MutableStateFlow<List<Song>>(emptyList())//listOf<Song>())
+    val favoritetsongs: StateFlow<List<Song>> = _favoritetsongs
 
     private val _selectedGenre = MutableStateFlow<Genre?>(null)
 
@@ -76,6 +79,7 @@ class HomeViewModel @Inject constructor(
     init {
         getGenres()
         getChart()
+        getAllObjects()
         viewModelScope.launch {
             // Combines the latest value from each of the flows, allowing us to generate a
             // view state instance which only contains the latest values.
@@ -91,6 +95,22 @@ class HomeViewModel @Inject constructor(
                 )
             }.collect { _state.value = it }
         }
+    }
+
+    fun saveFavoriteSong(song: Song) {
+        viewModelScope.launch {
+            saveFavoriteSongUseCase.invoke(song)
+        }
+    }
+
+    fun getAllObjects() {
+        viewModelScope.launch {
+         getAllFavoriteSongsUseCase.invoke().collect{songs ->
+             _favoritetsongs.value = songs
+            }
+
+        }
+
     }
 
     private fun getChart() {
@@ -236,6 +256,7 @@ class HomeViewModel @Inject constructor(
         }
 
     }
+
 
 }
 
