@@ -54,15 +54,33 @@ class MusicLocalDataSourceImpl @Inject constructor(
 
     }
 
-    override suspend fun removeFavoriteSong(song: Song) {
+    /*override suspend fun removeFavoriteSong(song: Song) {
         context.songProtoDataStore.updateData { songData ->
+            if (songData.toBuilder().songsList.contains(song.toFavoriteSong())) {
+                return
+            }
             val updatedSongsList = songData.toBuilder()
                 .removeSongs(songData.songsList.indexOf(song.toFavoriteSong())) // Eliminar la canción de la lista
                 .build()
 
             updatedSongsList
         }
-    }
+    }*/
+   override suspend fun removeFavoriteSong(song: Song) {
+        context.songProtoDataStore.updateData { songData ->
+            val songList = songData.songsList
+            val songIndex = songList.indexOfFirst { it.id == song.id } // Obtener el índice de la canción por su ID
 
+            if (songIndex != -1) {
+                val updatedSongsList = songData.toBuilder()
+                    .removeSongs(songIndex) // Eliminar la canción de la lista
+                    .build()
+
+                updatedSongsList
+            } else {
+                songData // La canción no existe en la lista, no se realiza ninguna modificación
+            }
+        }
+    }
 
 }

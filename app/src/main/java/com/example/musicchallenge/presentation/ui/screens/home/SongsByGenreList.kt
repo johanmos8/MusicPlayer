@@ -38,10 +38,10 @@ fun SongsByGenreList(songs: List<Song>) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .background(color = Color(0xFF2E2D37))//TODO
-                        .padding(10.dp)
-                        .fillMaxWidth()
+                        modifier = Modifier
+                            .background(color = Color(0xFF2E2D37))//TODO
+                            .padding(10.dp)
+                            .fillMaxWidth()
                 ) {
                     AsyncImage(
                         model = song.artist?.picture,
